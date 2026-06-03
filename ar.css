@@ -127,7 +127,7 @@ body.ar-camera-body {
   visibility: hidden;
 }
 
-.spiderman-model-stage {
+.hero-model-stage {
   position: absolute;
   inset: 0;
   z-index: 1;
@@ -136,17 +136,17 @@ body.ar-camera-body {
   visibility: visible;
 }
 
-.spiderman-model-stage:not(.is-hidden) {
+.hero-model-stage:not(.is-hidden) {
   animation: dossierOpen 420ms ease both;
 }
 
-.spiderman-model-stage.is-hidden {
+.hero-model-stage.is-hidden {
   opacity: 0;
   visibility: hidden;
 }
 
-.spiderman-model-scene,
-.spiderman-model-scene canvas {
+.hero-model-scene,
+.hero-model-scene canvas {
   position: absolute;
   inset: 0;
   width: 100% !important;

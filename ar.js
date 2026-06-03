@@ -14,14 +14,31 @@ function initCameraAr() {
   const selectPanel = document.getElementById('selectPanel');
   const dossierLayer = document.getElementById('heroDossierLayer');
   const backButton = document.getElementById('backToSelect');
-  const spidermanModelStage = document.getElementById('spidermanModelStage');
-  const spidermanScene = spidermanModelStage?.querySelector('a-scene');
-  const spidermanModel = document.getElementById('spidermanModel');
+  const heroModelStage = document.getElementById('heroModelStage');
+  const heroScene = heroModelStage?.querySelector('a-scene');
   const modelLoadStatus = document.getElementById('modelLoadStatus');
   if (!cameraRoot || !video) return;
 
-  let isSpidermanModelReady = false;
-  let didSpidermanModelFail = false;
+  const heroModels = {
+    spiderman: {
+      name: 'Spider-Man',
+      element: document.getElementById('spidermanModel'),
+      isReady: false,
+      didFail: false
+    },
+    deadpool: {
+      name: 'Deadpool',
+      element: document.getElementById('deadpoolModel'),
+      isReady: false,
+      didFail: false
+    },
+    ironman: {
+      name: 'Iron Man',
+      element: document.getElementById('ironmanModel'),
+      isReady: false,
+      didFail: false
+    }
+  };
 
   async function requestCamera() {
     if (!navigator.mediaDevices?.getUserMedia) {
@@ -63,50 +80,59 @@ function initCameraAr() {
   function showDossier(isOpen, heroKey = '') {
     selectPanel?.classList.toggle('is-hidden', isOpen);
     dossierLayer?.classList.toggle('is-hidden', !isOpen);
-    showSpidermanModel(isOpen && heroKey === 'spiderman');
+    showHeroModel(isOpen ? heroKey : '');
   }
 
-  function showSpidermanModel(isVisible) {
-    spidermanModelStage?.classList.toggle('is-hidden', !isVisible);
-    spidermanModelStage?.setAttribute('aria-hidden', String(!isVisible));
-    if (!isVisible || !modelLoadStatus) return;
+  function showHeroModel(heroKey) {
+    const selectedModel = heroModels[heroKey];
+    const isVisible = Boolean(selectedModel);
+
+    Object.entries(heroModels).forEach(([key, model]) => {
+      model.element?.setAttribute('visible', key === heroKey);
+    });
+
+    heroModelStage?.classList.toggle('is-hidden', !isVisible);
+    heroModelStage?.setAttribute('aria-hidden', String(!isVisible));
+    if (!isVisible || !selectedModel || !modelLoadStatus) return;
 
     modelLoadStatus.classList.remove('is-hidden');
-    if (didSpidermanModelFail) {
-      modelLoadStatus.textContent = 'Spider-Man model kon niet laden';
+    if (selectedModel.didFail) {
+      modelLoadStatus.textContent = `${selectedModel.name} model kon niet laden`;
       return;
     }
-    if (isSpidermanModelReady) {
-      showLoadedModelStatus();
+    if (selectedModel.isReady) {
+      showLoadedModelStatus(selectedModel.name);
     } else {
-      modelLoadStatus.textContent = 'Spider-Man AR model laden...';
+      modelLoadStatus.textContent = `${selectedModel.name} AR model laden...`;
     }
-    refreshSpidermanScene();
+    refreshHeroScene();
   }
 
-  function showLoadedModelStatus() {
+  function showLoadedModelStatus(heroName) {
     if (!modelLoadStatus) return;
-    modelLoadStatus.textContent = 'Spider-Man AR model actief';
+    modelLoadStatus.textContent = `${heroName} AR model actief`;
     window.setTimeout(() => modelLoadStatus.classList.add('is-hidden'), 1200);
   }
 
-  function refreshSpidermanScene() {
+  function refreshHeroScene() {
     window.requestAnimationFrame(() => {
       window.dispatchEvent(new Event('resize'));
-      spidermanScene?.resize?.();
-      spidermanScene?.renderer?.setSize(window.innerWidth, window.innerHeight);
+      heroScene?.resize?.();
+      heroScene?.renderer?.setSize(window.innerWidth, window.innerHeight);
     });
   }
 
   startButton?.addEventListener('click', requestCamera);
   backButton?.addEventListener('click', () => showDossier(false));
-  spidermanModel?.addEventListener('model-loaded', () => {
-    isSpidermanModelReady = true;
-    showLoadedModelStatus();
-  });
-  spidermanModel?.addEventListener('model-error', () => {
-    didSpidermanModelFail = true;
-    if (modelLoadStatus) modelLoadStatus.textContent = 'Spider-Man model kon niet laden';
+  Object.values(heroModels).forEach((model) => {
+    model.element?.addEventListener('model-loaded', () => {
+      model.isReady = true;
+      showLoadedModelStatus(model.name);
+    });
+    model.element?.addEventListener('model-error', () => {
+      model.didFail = true;
+      if (modelLoadStatus) modelLoadStatus.textContent = `${model.name} model kon niet laden`;
+    });
   });
 
   const heroButtons = document.querySelectorAll('.ar-hero-button');
