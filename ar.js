@@ -45,6 +45,7 @@ function initCameraAr() {
   const startButton = document.getElementById('startCameraButton');
   const scanStatus = document.getElementById('scanStatus');
   if (!cameraRoot || !video) return;
+  const arHeroButtons = document.querySelectorAll('.ar-hero-button');
 
   async function requestCamera() {
     if (!navigator.mediaDevices?.getUserMedia) {
@@ -89,6 +90,14 @@ function initCameraAr() {
   }
 
   startButton?.addEventListener('click', requestCamera);
+  arHeroButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      const hero = HERO_DATA[button.dataset.hero];
+      arHeroButtons.forEach((item) => item.classList.remove('is-selected'));
+      button.classList.add('is-selected');
+      if (scanStatus && hero) scanStatus.textContent = `${hero.name} dossier selected`;
+    });
+  });
   requestCamera();
 }
 

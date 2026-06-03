@@ -22,10 +22,41 @@
       </div>
     </header>
 
-    <!-- This is the first AR panel layer that appears in the real camera environment. -->
-    <section class="ar-panel-layer" aria-label="S.H.I.E.L.D. AR paneel">
-      <img class="ar-environment-panel" src="AR scherm 1 afbeeldingen/AR Omgeving 1.png" alt="S.H.I.E.L.D. AR dossier paneel" />
-      <p class="scan-status" id="scanStatus">Camera access pending...</p>
+    <!-- This AR panel is built from separate interface assets so the hero choices are real buttons. -->
+    <section class="ar-panel-layer" aria-label="S.H.I.E.L.D. heldselectie paneel">
+      <div class="ar-dossier-panel">
+        <img class="panel-logo" src="AR scherm 1 afbeeldingen/Logo.png" alt="S.H.I.E.L.D. logo" />
+        <img class="panel-wordmark" src="AR scherm 1 afbeeldingen/S.H.I.E.L.D..png" alt="S.H.I.E.L.D." />
+
+        <div class="panel-search" aria-label="Zoekbalk">
+          <img class="search-frame" src="AR scherm 1 afbeeldingen/Rectangle 14.png" alt="" />
+          <img class="search-icon" src="AR scherm 1 afbeeldingen/Vergrootglas.png" alt="" />
+          <img class="search-text" src="AR scherm 1 afbeeldingen/SEARCH. . ..png" alt="Search..." />
+        </div>
+
+        <p class="panel-instruction">Selecteer een held om het AR-dossier te openen.</p>
+
+        <div class="hero-button-list" aria-label="Heldselectie">
+          <button class="ar-hero-button" type="button" data-hero="spiderman">
+            <img class="button-frame" src="AR scherm 1 afbeeldingen/Rectangle 15.png" alt="" />
+            <img class="hero-label spiderman-label" src="AR scherm 1 afbeeldingen/Spiderman.png" alt="Spiderman" />
+          </button>
+          <button class="ar-hero-button" type="button" data-hero="deadpool">
+            <img class="button-frame" src="AR scherm 1 afbeeldingen/Rectangle 16.png" alt="" />
+            <img class="hero-label deadpool-label" src="AR scherm 1 afbeeldingen/Deadpool.png" alt="Deadpool" />
+            <img class="profile-dot" src="AR scherm 1 afbeeldingen/PF Deadpool.png" alt="" />
+          </button>
+          <button class="ar-hero-button" type="button" data-hero="ironwoman">
+            <img class="button-frame" src="AR scherm 1 afbeeldingen/Rectangle 16-1.png" alt="" />
+            <img class="hero-label ironwoman-label" src="AR scherm 1 afbeeldingen/Iron Woman.png" alt="Iron Woman" />
+          </button>
+        </div>
+
+        <div class="panel-footer">
+          <img src="AR scherm 1 afbeeldingen/Line 2.png" alt="" />
+          <span id="scanStatus">Camera access pending...</span>
+        </div>
+      </div>
     </section>
 
     <section class="camera-permission" id="cameraPermission" aria-live="polite">
