@@ -1,0 +1,452 @@
+/* === Basis reset === */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #061326;
+  --panel: rgba(7, 24, 48, 0.88);
+  --cyan: #8edcff;
+  --cyan-soft: rgba(142, 220, 255, 0.45);
+  --text: #c7d7e8;
+  --muted: #99abc0;
+}
+
+body {
+  min-height: 100vh;
+  background: #050d1a;
+  color: var(--text);
+  font-family: 'Rajdhani', sans-serif;
+  overflow-x: hidden;
+}
+
+/* === Marvel balk === */
+.top-bar {
+  height: 38px;
+  background: #0a1830;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.35);
+  display: flex;
+  align-items: center;
+  padding-left: 8px;
+}
+
+.marvel-logo {
+  background: #ed1d24;
+  color: #fff;
+  font: 900 16px/1 Arial, sans-serif;
+  letter-spacing: -1px;
+  padding: 3px 4px;
+  display: inline-block;
+}
+
+/* === Bovenste header === */
+.hero-header {
+  position: relative;
+  height: clamp(178px, 10.5vw, 210px);
+  background-image: linear-gradient(rgba(4, 12, 24, 0.88), rgba(4, 12, 24, 0.9)), url("afbeeldingen/Achtergrond.png");
+  background-size: cover;
+  background-position: center top;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.nick-fury {
+  position: absolute;
+  left: 10.3vw;
+  bottom: 0;
+  width: clamp(150px, 12.1vw, 232px);
+  height: auto;
+}
+
+.shield-logo {
+  position: absolute;
+  left: 50%;
+  top: clamp(16px, 1.4vw, 26px);
+  transform: translateX(-50%);
+  width: clamp(190px, 15vw, 288px);
+}
+
+.avengers-header {
+  position: absolute;
+  right: 4.4vw;
+  bottom: clamp(-82px, -4.3vw, -58px);
+  width: clamp(360px, 26vw, 498px);
+  z-index: 3;
+  filter: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.75));
+}
+
+/* === Hoofdvlak zoals Figma === */
+.archive-panel {
+  position: relative;
+  width: 100%;
+  max-width: none;
+  height: calc(100vh - 38px - clamp(178px, 10.5vw, 210px));
+  min-height: 0;
+  margin: 0 auto;
+  padding: clamp(48px, 3.6vw, 58px) 6.45vw clamp(28px, 2vw, 38px);
+  background-image: linear-gradient(rgba(5, 18, 39, 0.92), rgba(5, 18, 39, 0.94)), url("afbeeldingen/Achtergrond-1.png");
+  background-size: cover;
+  background-position: center;
+  border-radius: 34px 34px 0 0;
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(52, 151, 212, 0.25), 0 0 32px rgba(0, 0, 0, 0.55);
+}
+
+.archive-panel::before {
+  content: "";
+  position: absolute;
+  inset: clamp(24px, 1.95vw, 34px) 2.45vw clamp(22px, 1.88vw, 32px);
+  border: 2px solid var(--cyan);
+  border-radius: 34px;
+  opacity: 0.92;
+  pointer-events: none;
+  filter: drop-shadow(0 0 2px var(--cyan));
+}
+
+.archive-panel::after {
+  content: "";
+  position: absolute;
+  left: 4.9vw;
+  top: clamp(22px, 1.8vw, 31px);
+  width: 51.6vw;
+  height: 6px;
+  background: url("afbeeldingen/Line 1.png") center / 100% 100% no-repeat;
+  opacity: 0.95;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.title-block {
+  position: relative;
+  z-index: 2;
+  width: 66vw;
+}
+
+.title-block h1 {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 400;
+  font-size: clamp(38px, 3.35vw, 68px);
+  line-height: 1;
+  letter-spacing: 1px;
+  color: #c9d5e6;
+  text-decoration: underline;
+  text-underline-offset: 7px;
+  text-decoration-thickness: 2px;
+  text-shadow: 0 0 12px rgba(126, 205, 255, 0.25);
+  white-space: nowrap;
+}
+
+.title-block p {
+  margin-top: 8px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(14px, 0.97vw, 19px);
+  color: #b9c3d3;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+.weapon {
+  position: absolute;
+  left: 10.35vw;
+  top: clamp(125px, 16.5vh, 145px);
+  width: 8.8vw;
+  transform: rotate(-18deg);
+  z-index: 2;
+}
+
+.intro-box,
+.description-box,
+.hologram-card,
+.hq-card {
+  position: absolute;
+  z-index: 2;
+  background: rgba(9, 28, 53, 0.74);
+  border: 1px solid var(--cyan-soft);
+  box-shadow: inset 0 0 0 1px rgba(142, 220, 255, 0.16), 0 0 16px rgba(64, 174, 255, 0.12);
+}
+
+.intro-box::before,
+.description-box::before,
+.hologram-card::before,
+.hq-card::before {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border: 1px solid rgba(142, 220, 255, 0.75);
+  border-radius: inherit;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.intro-box {
+  top: clamp(148px, 19vh, 166px);
+  left: 21.3vw;
+  width: 37.8vw;
+  min-height: 0;
+  padding: clamp(12px, 1vw, 16px) clamp(18px, 1.25vw, 24px);
+  border-radius: 28px;
+}
+
+.intro-box p,
+.description-box p {
+  font-size: clamp(15px, 0.9vw, 17px);
+  line-height: 1.02;
+  color: #aebbd0;
+}
+
+.dossier-card {
+  position: absolute;
+  top: clamp(50px, 6.5vh, 72px);
+  right: 25.2vw;
+  width: 10.5vw;
+  z-index: 3;
+  transform: rotate(-13deg);
+}
+
+.hq-card {
+  left: 5.55vw;
+  top: clamp(278px, 31.5vh, 305px);
+  width: 20.4vw;
+  height: 20.4vw;
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.hq-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.arrow-line {
+  position: absolute;
+  left: 26.9vw;
+  top: clamp(272px, 31.5vh, 300px);
+  width: 9.5vw;
+  height: auto;
+  transform: none;
+  z-index: 4;
+  opacity: 0.95;
+  filter: drop-shadow(0 0 4px rgba(142, 220, 255, 0.35));
+}
+
+.arrow-line::after {
+  content: none;
+}
+
+.description-box {
+  left: 30.5vw;
+  top: clamp(328px, 38vh, 360px);
+  width: 19.7vw;
+  min-height: 0;
+  padding: clamp(14px, 1.05vw, 20px) clamp(18px, 1.3vw, 25px);
+  border-radius: 24px;
+}
+
+.medal {
+  position: absolute;
+  left: 34.2vw;
+  top: clamp(470px, 55vh, 505px);
+  width: 6.4vw;
+  height: 6.4vw;
+  object-fit: contain;
+  z-index: 2;
+}
+
+.hologram-card {
+  left: 54.8vw;
+  top: clamp(286px, 33.5vh, 312px);
+  width: 17.4vw;
+  height: 16.7vw;
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hologram-card img {
+  width: 82%;
+  height: auto;
+  object-fit: contain;
+}
+
+.ar-button {
+  position: absolute;
+  left: 42vw;
+  bottom: clamp(16px, 2.2vh, 28px);
+  z-index: 3;
+  display: block;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.ar-button img {
+  width: 15.4vw;
+  display: block;
+}
+
+.ar-button:hover {
+  transform: translateY(-2px);
+  filter: drop-shadow(0 0 10px rgba(142, 220, 255, 0.55));
+}
+
+.status-panel {
+  position: absolute;
+  right: 3.9vw;
+  top: clamp(210px, 25.5vh, 245px);
+  width: clamp(335px, 20.3vw, 390px);
+  z-index: 3;
+}
+
+.status-panel img {
+  width: 100%;
+  display: block;
+}
+
+/* === QR overlay voor mobiele AR-flow === */
+.qr-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: none;
+  place-items: center;
+  padding: 24px;
+  background: rgba(1, 8, 20, 0.78);
+  backdrop-filter: blur(8px);
+}
+
+.qr-modal.is-open {
+  display: grid;
+}
+
+.qr-modal__panel {
+  position: relative;
+  width: min(420px, 92vw);
+  padding: 28px 26px 26px;
+  text-align: center;
+  color: var(--text);
+  background: rgba(5, 18, 39, 0.96);
+  border: 1px solid rgba(142, 220, 255, 0.78);
+  border-radius: 24px;
+  box-shadow: 0 0 34px rgba(64, 174, 255, 0.28), inset 0 0 22px rgba(142, 220, 255, 0.09);
+}
+
+.qr-modal__close {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  width: 34px;
+  height: 34px;
+  color: var(--cyan);
+  background: rgba(5, 18, 39, 0.8);
+  border: 1px solid rgba(142, 220, 255, 0.55);
+  border-radius: 50%;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.qr-modal__logo {
+  width: 136px;
+  margin-bottom: 12px;
+  filter: drop-shadow(0 0 12px rgba(142, 220, 255, 0.35));
+}
+
+.qr-modal__status,
+.qr-modal h2,
+.qr-modal__fallback {
+  font-family: 'Orbitron', sans-serif;
+}
+
+.qr-modal__status {
+  color: var(--cyan);
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.qr-modal h2 {
+  margin: 8px 0 18px;
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.qr-modal__code {
+  width: 220px;
+  height: 220px;
+  padding: 10px;
+  margin: 0 auto 16px;
+  display: block;
+  background: #eaf8ff;
+  border: 1px solid rgba(142, 220, 255, 0.8);
+}
+
+.qr-modal p {
+  font-size: 17px;
+  line-height: 1.2;
+}
+
+.qr-modal__fallback {
+  display: inline-block;
+  margin-top: 16px;
+  color: var(--cyan);
+  font-size: 12px;
+  text-decoration: none;
+}
+
+@media (min-width: 1181px) {
+  body {
+    height: 100vh;
+    overflow: hidden;
+  }
+}
+
+@media (max-width: 1180px) {
+  .hero-header { height: 210px; }
+  .avengers-header { width: 360px; right: 1%; }
+
+  .archive-panel {
+    width: calc(100% - 28px);
+    padding: 46px 26px;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  .archive-panel::before { inset: 18px; }
+  .archive-panel::after { display: none; }
+  .title-block h1,
+  .title-block p {
+    white-space: normal;
+  }
+
+  .title-block,
+  .intro-box,
+  .description-box,
+  .hologram-card,
+  .hq-card,
+  .status-panel,
+  .ar-button,
+  .weapon,
+  .dossier-card,
+  .medal {
+    position: relative;
+    left: auto;
+    right: auto;
+    top: auto;
+    bottom: auto;
+    width: 100%;
+    max-width: 620px;
+    margin: 0 auto;
+    transform: none;
+  }
+
+  .weapon, .dossier-card, .medal { width: 100px; }
+  .arrow-line { display: none; }
+  .hq-card { height: auto; }
+  .hq-card img { height: auto; }
+  .hologram-card { height: auto; padding: 28px; }
+  .ar-button img { width: min(280px, 100%); }
+  .status-panel { max-width: 300px; }
+}
