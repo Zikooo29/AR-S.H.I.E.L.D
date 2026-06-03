@@ -1,51 +1,21 @@
-// Replace this placeholder with your final deployed GitHub Pages URL.
+// Replace this URL if the GitHub Pages location changes.
 const MOBILE_AR_URL = 'https://zikooo29.github.io/AR-S.H.I.E.L.D/ar.html';
 
-const HERO_DATA = {
-  spiderman: {
-    name: 'Spider-Man',
-    role: 'Friendly Neighborhood Asset',
-    image: 'AR scherm 1 afbeeldingen/Spiderman.png',
-    profile: 'AR scherm 1 afbeeldingen/PF Spiderman.png',
-    status: 'Active',
-    access: '07',
-    power: '86',
-    equipment: 'Web shooters',
-    threat: 'Enhanced agility'
-  },
-  deadpool: {
-    name: 'Deadpool',
-    role: 'Unstable Regeneration Asset',
-    image: 'AR scherm 1 afbeeldingen/Deadpool.png',
-    profile: 'AR scherm 1 afbeeldingen/PF Deadpool.png',
-    status: 'Active',
-    access: '09',
-    power: '91',
-    equipment: 'Katanas',
-    threat: 'Chaotic combatant'
-  },
-  ironwoman: {
-    name: 'Iron Woman',
-    role: 'Armored Tech Specialist',
-    image: 'AR scherm 1 afbeeldingen/Iron Woman.png',
-    profile: 'AR scherm 1 afbeeldingen/Iron Woman.png',
-    status: 'Active',
-    access: '08',
-    power: '94',
-    equipment: 'Arc armor',
-    threat: 'High energy tech'
-  }
-};
-
-// First AR step: open the back camera and place the S.H.I.E.L.D. panel over the live environment.
+// Open the back camera and place the S.H.I.E.L.D. panel over the live environment.
 function initCameraAr() {
   const cameraRoot = document.getElementById('cameraAr');
   const video = document.getElementById('cameraFeed');
   const permissionPanel = document.getElementById('cameraPermission');
   const startButton = document.getElementById('startCameraButton');
   const scanStatus = document.getElementById('scanStatus');
+  const searchInput = document.getElementById('heroSearch');
+  const selectPanel = document.getElementById('selectPanel');
+  const dossierLayer = document.getElementById('heroDossierLayer');
+  const backButton = document.getElementById('backToSelect');
+  const spidermanModelStage = document.getElementById('spidermanModelStage');
+  const spidermanModel = document.getElementById('spidermanModel');
+  const modelLoadStatus = document.getElementById('modelLoadStatus');
   if (!cameraRoot || !video) return;
-  const arHeroButtons = document.querySelectorAll('.ar-hero-button');
 
   async function requestCamera() {
     if (!navigator.mediaDevices?.getUserMedia) {
@@ -54,7 +24,6 @@ function initCameraAr() {
     }
 
     try {
-      // Prefer the back camera. If exact matching fails, the catch block retries with an ideal preference.
       const stream = await navigator.mediaDevices.getUserMedia({
         video: {
           facingMode: { exact: 'environment' },
@@ -89,15 +58,58 @@ function initCameraAr() {
     if (scanStatus) scanStatus.textContent = 'S.H.I.E.L.D. AR panel initialized';
   }
 
+  function openEmptyDossier(heroKey) {
+    selectPanel?.classList.add('is-hidden');
+    dossierLayer?.classList.remove('is-hidden');
+    spidermanModelStage?.classList.toggle('is-hidden', heroKey !== 'spiderman');
+    if (heroKey === 'spiderman' && modelLoadStatus) {
+      modelLoadStatus.textContent = 'Spider-Man model laden...';
+    }
+  }
+
+  function closeEmptyDossier() {
+    dossierLayer?.classList.add('is-hidden');
+    selectPanel?.classList.remove('is-hidden');
+    spidermanModelStage?.classList.add('is-hidden');
+  }
+
   startButton?.addEventListener('click', requestCamera);
-  arHeroButtons.forEach((button) => {
+  backButton?.addEventListener('click', closeEmptyDossier);
+  spidermanModel?.addEventListener('model-loaded', () => {
+    if (modelLoadStatus) modelLoadStatus.textContent = 'Spider-Man model geladen';
+  });
+  spidermanModel?.addEventListener('model-error', () => {
+    if (modelLoadStatus) modelLoadStatus.textContent = 'Model kon niet laden';
+  });
+
+  const heroButtons = document.querySelectorAll('.ar-hero-button');
+
+  heroButtons.forEach((button) => {
     button.addEventListener('click', () => {
-      const hero = HERO_DATA[button.dataset.hero];
-      arHeroButtons.forEach((item) => item.classList.remove('is-selected'));
+      heroButtons.forEach((item) => item.classList.remove('is-selected'));
       button.classList.add('is-selected');
-      if (scanStatus && hero) scanStatus.textContent = `${hero.name} dossier selected`;
+      openEmptyDossier(button.dataset.hero);
     });
   });
+
+  searchInput?.addEventListener('input', () => {
+    const query = searchInput.value.trim().toLowerCase();
+    let visibleCount = 0;
+
+    heroButtons.forEach((button) => {
+      const haystack = button.dataset.search || button.dataset.hero || '';
+      const isVisible = !query || haystack.includes(query);
+      button.classList.toggle('is-hidden', !isVisible);
+      if (isVisible) visibleCount += 1;
+    });
+
+    if (scanStatus) {
+      scanStatus.textContent = visibleCount
+        ? `${visibleCount} dossier result${visibleCount === 1 ? '' : 's'} found`
+        : 'No matching hero dossier found';
+    }
+  });
+
   requestCamera();
 }
 
@@ -136,52 +148,7 @@ function initQrModal() {
   });
 }
 
-// Hero selection and dossier state on ar.html.
-function initHeroDossier() {
-  const selectView = document.getElementById('heroSelectView');
-  const dossierView = document.getElementById('dossierView');
-  if (!selectView || !dossierView) return;
-
-  const cards = document.querySelectorAll('.hero-card');
-  const backButton = document.getElementById('backToSelect');
-  const closeButton = document.getElementById('closeDossier');
-
-  function showSelection() {
-    dossierView.classList.remove('is-active');
-    selectView.classList.add('is-active');
-  }
-
-  function openDossier(heroKey) {
-    const hero = HERO_DATA[heroKey];
-    if (!hero) return;
-
-    document.getElementById('heroName').textContent = hero.name;
-    document.getElementById('heroRole').textContent = hero.role;
-    document.getElementById('heroImage').src = hero.image;
-    document.getElementById('heroImage').alt = hero.name;
-    document.getElementById('profileImage').src = hero.profile;
-    document.getElementById('profileImage').alt = `${hero.name} profile`;
-    document.getElementById('heroStatus').textContent = hero.status;
-    document.getElementById('heroAccess').textContent = hero.access;
-    document.getElementById('heroPower').textContent = hero.power;
-    document.getElementById('heroEquipment').textContent = hero.equipment;
-    document.getElementById('heroThreat').textContent = hero.threat;
-
-    cards.forEach((card) => card.classList.toggle('is-selected', card.dataset.hero === heroKey));
-    selectView.classList.remove('is-active');
-    dossierView.classList.add('is-active');
-  }
-
-  cards.forEach((card) => {
-    card.addEventListener('click', () => openDossier(card.dataset.hero));
-  });
-
-  backButton?.addEventListener('click', showSelection);
-  closeButton?.addEventListener('click', showSelection);
-}
-
 document.addEventListener('DOMContentLoaded', () => {
   initQrModal();
   initCameraAr();
-  initHeroDossier();
 });

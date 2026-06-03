@@ -5,25 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>S.H.I.E.L.D. Mobile AR</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aframe-extras@7.5.4/dist/aframe-extras.min.js"></script>
   <link rel="stylesheet" href="ar.css" />
 </head>
 <body class="ar-camera-body">
   <main class="camera-ar" id="cameraAr">
     <!-- Live camera feed. JavaScript requests the back camera with facingMode: environment. -->
     <video class="camera-feed" id="cameraFeed" autoplay muted playsinline></video>
-
     <div class="camera-shade" aria-hidden="true"></div>
 
-    <header class="camera-hud">
-      <img src="AR scherm 1 afbeeldingen/S.H.I.E.L.D..png" alt="S.H.I.E.L.D." />
-      <div>
-        <p>Mobile AR clearance</p>
-        <h1>Hero Dossier Scan</h1>
-      </div>
-    </header>
-
-    <!-- This AR panel is built from separate interface assets so the hero choices are real buttons. -->
-    <section class="ar-panel-layer" aria-label="S.H.I.E.L.D. heldselectie paneel">
+    <!-- Holographic panel built from separate assets, with real hero buttons. -->
+    <section class="ar-panel-layer" id="selectPanel" aria-label="S.H.I.E.L.D. heldselectie paneel">
       <div class="ar-dossier-panel">
         <img class="panel-logo" src="AR scherm 1 afbeeldingen/Logo.png" alt="S.H.I.E.L.D. logo" />
         <img class="panel-wordmark" src="AR scherm 1 afbeeldingen/S.H.I.E.L.D..png" alt="S.H.I.E.L.D." />
@@ -31,32 +24,61 @@
         <div class="panel-search" aria-label="Zoekbalk">
           <img class="search-frame" src="AR scherm 1 afbeeldingen/Rectangle 14.png" alt="" />
           <img class="search-icon" src="AR scherm 1 afbeeldingen/Vergrootglas.png" alt="" />
-          <img class="search-text" src="AR scherm 1 afbeeldingen/SEARCH. . ..png" alt="Search..." />
+          <input class="search-input" id="heroSearch" type="search" placeholder="SEARCH..." autocomplete="off" aria-label="Zoek held" />
         </div>
 
         <p class="panel-instruction">Selecteer een held om het AR-dossier te openen.</p>
 
         <div class="hero-button-list" aria-label="Heldselectie">
-          <button class="ar-hero-button" type="button" data-hero="spiderman">
+          <button class="ar-hero-button" type="button" data-hero="spiderman" data-search="spiderman spider-man peter parker">
             <img class="button-frame" src="AR scherm 1 afbeeldingen/Rectangle 15.png" alt="" />
+            <img class="profile-dot" src="AR scherm 1 afbeeldingen/PF Spiderman.png" alt="" />
             <img class="hero-label spiderman-label" src="AR scherm 1 afbeeldingen/Spiderman.png" alt="Spiderman" />
           </button>
-          <button class="ar-hero-button" type="button" data-hero="deadpool">
+          <button class="ar-hero-button" type="button" data-hero="deadpool" data-search="deadpool wade wilson">
             <img class="button-frame" src="AR scherm 1 afbeeldingen/Rectangle 16.png" alt="" />
-            <img class="hero-label deadpool-label" src="AR scherm 1 afbeeldingen/Deadpool.png" alt="Deadpool" />
             <img class="profile-dot" src="AR scherm 1 afbeeldingen/PF Deadpool.png" alt="" />
+            <img class="hero-label deadpool-label" src="AR scherm 1 afbeeldingen/Deadpool.png" alt="Deadpool" />
           </button>
-          <button class="ar-hero-button" type="button" data-hero="ironwoman">
+          <button class="ar-hero-button" type="button" data-hero="ironman" data-search="iron man ironman tony stark">
             <img class="button-frame" src="AR scherm 1 afbeeldingen/Rectangle 16-1.png" alt="" />
-            <img class="hero-label ironwoman-label" src="AR scherm 1 afbeeldingen/Iron Woman.png" alt="Iron Woman" />
+            <img class="profile-dot" src="AR scherm 1 afbeeldingen/PF Ironman.png" alt="" />
+            <img class="hero-label ironman-label" src="AR scherm 1 afbeeldingen/Iron man.png" alt="Iron Man" />
           </button>
         </div>
 
         <div class="panel-footer">
-          <img src="AR scherm 1 afbeeldingen/Line 2.png" alt="" />
           <span id="scanStatus">Camera access pending...</span>
         </div>
       </div>
+    </section>
+
+    <section class="hero-dossier-layer is-hidden" id="heroDossierLayer" aria-label="S.H.I.E.L.D. hero dossier">
+      <div class="spiderman-model-stage is-hidden" id="spidermanModelStage" aria-hidden="true">
+        <a-scene
+          class="spiderman-model-scene"
+          embedded
+          renderer="alpha: true; antialias: true; colorManagement: true"
+          loading-screen="enabled: false"
+          vr-mode-ui="enabled: false"
+          device-orientation-permission-ui="enabled: false">
+          <a-entity light="type: ambient; color: #7edcff; intensity: 1.6"></a-entity>
+          <a-entity light="type: point; color: #26ddff; intensity: 2.5; distance: 5" position="0 1.8 1.6"></a-entity>
+
+          <a-entity
+            id="spidermanModel"
+            gltf-model="url(ar_assets/spiderman.glb)"
+            position="0 -1.6 -3"
+            scale="2 2 2"
+            rotation="0 0 0"
+            animation-mixer="clip: *; loop: repeat">
+          </a-entity>
+
+          <a-camera position="0 0 0" look-controls="enabled: false" wasd-controls="enabled: false"></a-camera>
+        </a-scene>
+        <span class="model-load-status" id="modelLoadStatus">Spider-Man model laden...</span>
+      </div>
+      <button class="dossier-back-button" id="backToSelect" type="button">Terug</button>
     </section>
 
     <section class="camera-permission" id="cameraPermission" aria-live="polite">
