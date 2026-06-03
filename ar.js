@@ -37,6 +37,61 @@ const HERO_DATA = {
   }
 };
 
+// First AR step: open the back camera and place the S.H.I.E.L.D. panel over the live environment.
+function initCameraAr() {
+  const cameraRoot = document.getElementById('cameraAr');
+  const video = document.getElementById('cameraFeed');
+  const permissionPanel = document.getElementById('cameraPermission');
+  const startButton = document.getElementById('startCameraButton');
+  const scanStatus = document.getElementById('scanStatus');
+  if (!cameraRoot || !video) return;
+
+  async function requestCamera() {
+    if (!navigator.mediaDevices?.getUserMedia) {
+      if (scanStatus) scanStatus.textContent = 'Camera wordt niet ondersteund in deze browser.';
+      return;
+    }
+
+    try {
+      // Prefer the back camera. If exact matching fails, the catch block retries with an ideal preference.
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode: { exact: 'environment' },
+          width: { ideal: 1280 },
+          height: { ideal: 720 }
+        },
+        audio: false
+      });
+      activateCamera(stream);
+    } catch (exactError) {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: {
+            facingMode: { ideal: 'environment' },
+            width: { ideal: 1280 },
+            height: { ideal: 720 }
+          },
+          audio: false
+        });
+        activateCamera(stream);
+      } catch (error) {
+        if (scanStatus) scanStatus.textContent = 'Camera toegang geweigerd. Probeer opnieuw.';
+        permissionPanel?.classList.remove('is-hidden');
+      }
+    }
+  }
+
+  function activateCamera(stream) {
+    video.srcObject = stream;
+    cameraRoot.classList.add('is-camera-ready');
+    permissionPanel?.classList.add('is-hidden');
+    if (scanStatus) scanStatus.textContent = 'S.H.I.E.L.D. AR panel initialized';
+  }
+
+  startButton?.addEventListener('click', requestCamera);
+  requestCamera();
+}
+
 // QR modal on the existing website.
 function initQrModal() {
   const openButton = document.querySelector('.ar-button');
@@ -118,5 +173,6 @@ function initHeroDossier() {
 
 document.addEventListener('DOMContentLoaded', () => {
   initQrModal();
+  initCameraAr();
   initHeroDossier();
 });

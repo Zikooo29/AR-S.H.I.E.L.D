@@ -1,4 +1,4 @@
-/* Base AR interface */
+/* Mobile camera AR base */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -7,346 +7,180 @@
 
 :root {
   --cyan: #7edcff;
-  --cyan-strong: #11d5ff;
-  --panel: rgba(4, 19, 39, 0.82);
-  --panel-deep: rgba(3, 13, 28, 0.92);
-  --text: #d5e8ff;
-  --muted: #91a9c4;
+  --cyan-strong: #14d9ff;
+  --text: #d8ebff;
+  --panel: rgba(3, 14, 32, 0.82);
 }
 
-body.ar-body {
-  min-height: 100vh;
+html,
+body.ar-camera-body {
+  width: 100%;
+  min-height: 100%;
+  background: #020914;
   color: var(--text);
   font-family: 'Rajdhani', sans-serif;
-  background:
-    linear-gradient(rgba(2, 8, 18, 0.72), rgba(2, 8, 18, 0.86)),
-    url("AR scherm 1 afbeeldingen/Achtergrond AR.png") center / cover no-repeat,
-    #031023;
-  overflow-x: hidden;
-}
-
-.ar-shell {
-  min-height: 100vh;
-  padding: clamp(18px, 3vw, 36px);
-  display: grid;
-  grid-template-rows: auto 1fr;
-  gap: 18px;
-}
-
-.ar-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 18px;
-  padding: 14px 18px;
-  background: rgba(2, 12, 28, 0.7);
-  border: 1px solid rgba(126, 220, 255, 0.46);
-  box-shadow: 0 0 24px rgba(17, 213, 255, 0.18), inset 0 0 18px rgba(126, 220, 255, 0.08);
-}
-
-.ar-header h1 {
-  font-family: 'Orbitron', sans-serif;
-  font-size: clamp(22px, 4vw, 46px);
-  font-weight: 400;
-  letter-spacing: 0;
-  text-align: center;
-  white-space: nowrap;
-}
-
-.ar-eyebrow {
-  margin-bottom: 4px;
-  color: var(--cyan);
-  font-family: 'Orbitron', sans-serif;
-  font-size: 12px;
-  text-align: center;
-  text-transform: uppercase;
-}
-
-.ar-logo,
-.ar-shield-mark {
-  width: clamp(64px, 10vw, 115px);
-  height: auto;
-  object-fit: contain;
-  filter: drop-shadow(0 0 12px rgba(126, 220, 255, 0.32));
-}
-
-/* Hero selection */
-.hero-select-view,
-.dossier-view {
-  display: none;
-}
-
-.hero-select-view.is-active,
-.dossier-view.is-active {
-  display: grid;
-}
-
-.hero-select-view {
-  align-content: center;
-  gap: 26px;
-  padding: clamp(18px, 3vw, 42px);
-  border: 1px solid rgba(126, 220, 255, 0.52);
-  border-radius: 28px;
-  background:
-    linear-gradient(rgba(5, 20, 43, 0.86), rgba(5, 20, 43, 0.94)),
-    url("AR scherm 1 afbeeldingen/Achtergrond.png") center / cover no-repeat;
-  box-shadow: inset 0 0 0 1px rgba(126, 220, 255, 0.2), 0 0 30px rgba(0, 0, 0, 0.45);
-}
-
-.scan-panel {
-  max-width: 820px;
-  margin: 0 auto;
-  text-align: center;
-}
-
-.search-bar {
-  width: min(100%, 520px);
-  margin: 0 auto 18px;
-  padding: 13px 18px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  border: 1px solid rgba(126, 220, 255, 0.55);
-  border-radius: 999px;
-  background: rgba(1, 10, 25, 0.72);
-  color: var(--cyan);
-  font-family: 'Orbitron', sans-serif;
-  font-size: 13px;
-}
-
-.search-bar img {
-  width: 22px;
-}
-
-.scan-panel h2 {
-  font-family: 'Orbitron', sans-serif;
-  font-size: clamp(24px, 4vw, 44px);
-  font-weight: 400;
-  letter-spacing: 0;
-}
-
-.scan-panel p {
-  margin-top: 10px;
-  color: var(--muted);
-  font-size: clamp(17px, 2vw, 22px);
-}
-
-.hero-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(180px, 1fr));
-  gap: clamp(16px, 2.4vw, 28px);
-}
-
-.hero-card {
-  min-height: 260px;
-  padding: 24px 18px;
-  display: grid;
-  place-items: center;
-  gap: 18px;
-  color: var(--text);
-  font-family: 'Orbitron', sans-serif;
-  font-size: clamp(16px, 1.5vw, 22px);
-  background: var(--panel);
-  border: 1px solid rgba(126, 220, 255, 0.5);
-  border-radius: 20px;
-  cursor: pointer;
-  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
-}
-
-.hero-card img {
-  max-height: 170px;
-  max-width: 86%;
-  object-fit: contain;
-  filter: drop-shadow(0 0 16px rgba(126, 220, 255, 0.28));
-}
-
-.hero-card:hover,
-.hero-card:focus-visible {
-  transform: translateY(-6px) scale(1.02);
-  border-color: var(--cyan-strong);
-  box-shadow: 0 0 24px rgba(17, 213, 255, 0.35);
-  outline: none;
-}
-
-.hero-card.is-selected {
-  transform: scale(0.98);
-  box-shadow: inset 0 0 28px rgba(17, 213, 255, 0.25);
-}
-
-/* Dossier screen */
-.dossier-view {
-  gap: 14px;
-  padding: clamp(14px, 2vw, 26px);
-  background: rgba(3, 12, 28, 0.88);
-  border: 1px solid rgba(126, 220, 255, 0.5);
-  border-radius: 28px;
-  box-shadow: inset 0 0 24px rgba(126, 220, 255, 0.1);
-}
-
-.dossier-topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  color: var(--cyan);
-  font-family: 'Orbitron', sans-serif;
-  font-size: 13px;
-  text-transform: uppercase;
-}
-
-.ghost-button {
-  padding: 10px 14px;
-  color: var(--text);
-  background: rgba(4, 19, 39, 0.86);
-  border: 1px solid rgba(126, 220, 255, 0.56);
-  border-radius: 999px;
-  font: 600 13px 'Orbitron', sans-serif;
-  cursor: pointer;
-}
-
-.ghost-button:hover {
-  border-color: var(--cyan-strong);
-  box-shadow: 0 0 16px rgba(17, 213, 255, 0.26);
-}
-
-.dossier-layout {
-  display: grid;
-  grid-template-columns: minmax(170px, 0.8fr) minmax(280px, 1.5fr) minmax(220px, 1fr);
-  gap: clamp(14px, 2vw, 26px);
-  align-items: stretch;
-}
-
-.profile-panel,
-.intel-panel,
-.hologram-stage {
-  background: var(--panel);
-  border: 1px solid rgba(126, 220, 255, 0.52);
-  border-radius: 20px;
-  box-shadow: inset 0 0 20px rgba(126, 220, 255, 0.08);
-}
-
-.profile-panel {
-  padding: 20px;
-  display: grid;
-  align-content: center;
-  justify-items: center;
-  text-align: center;
-}
-
-.profile-panel img {
-  width: min(78%, 180px);
-  margin-bottom: 18px;
-  object-fit: contain;
-}
-
-.profile-panel h2 {
-  font-family: 'Orbitron', sans-serif;
-  font-size: clamp(20px, 2vw, 30px);
-  font-weight: 400;
-}
-
-.profile-panel p {
-  margin-top: 8px;
-  color: var(--muted);
-}
-
-.hologram-stage {
-  position: relative;
-  min-height: 520px;
   overflow: hidden;
-  display: grid;
-  place-items: center;
 }
 
-.hero-hologram {
+.camera-ar {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  background: #020914;
+}
+
+.camera-feed {
   position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: #020914;
+}
+
+.camera-shade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(rgba(2, 10, 24, 0.12), rgba(2, 10, 24, 0.42)),
+    radial-gradient(circle at center, transparent 35%, rgba(2, 8, 18, 0.36));
+}
+
+.camera-hud {
+  position: absolute;
+  top: max(14px, env(safe-area-inset-top));
+  left: 14px;
+  right: 14px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: rgba(2, 11, 27, 0.72);
+  border: 1px solid rgba(126, 220, 255, 0.42);
+  box-shadow: 0 0 18px rgba(20, 217, 255, 0.18);
+  backdrop-filter: blur(7px);
+}
+
+.camera-hud img {
+  width: 58px;
+  height: auto;
+  filter: drop-shadow(0 0 8px rgba(126, 220, 255, 0.35));
+}
+
+.camera-hud p,
+.camera-hud h1,
+.scan-status,
+.camera-permission h2 {
+  font-family: 'Orbitron', sans-serif;
+}
+
+.camera-hud p {
+  color: var(--cyan);
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+.camera-hud h1 {
+  margin-top: 2px;
+  font-size: clamp(17px, 5vw, 28px);
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.ar-panel-layer {
+  position: absolute;
+  inset: 0;
   z-index: 2;
-  top: 28px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: min(42%, 260px);
-  animation: hologramFloat 3.6s ease-in-out infinite;
+  display: grid;
+  place-items: center;
   pointer-events: none;
 }
 
-.hero-hologram img {
-  width: 100%;
-  opacity: 0.86;
-  filter: drop-shadow(0 0 22px rgba(126, 220, 255, 0.55));
+.ar-environment-panel {
+  width: min(92vw, 560px);
+  max-height: 70vh;
+  object-fit: contain;
+  opacity: 0;
+  transform: translateY(18px) scale(0.96);
+  filter:
+    drop-shadow(0 0 10px rgba(126, 220, 255, 0.55))
+    drop-shadow(0 0 28px rgba(20, 217, 255, 0.3));
 }
 
-.aframe-stage {
-  width: 100%;
-  height: 100%;
-  min-height: 520px;
-  background: radial-gradient(circle at center, rgba(17, 213, 255, 0.16), transparent 42%);
+.camera-ar.is-camera-ready .ar-environment-panel {
+  animation: panelBoot 850ms ease forwards, panelFloat 3.8s ease-in-out 900ms infinite;
 }
 
-.intel-panel {
-  padding: 20px;
-  display: grid;
-  align-content: center;
-}
-
-.intel-panel dl {
-  display: grid;
-  gap: 12px;
-}
-
-.intel-panel div {
+.scan-status {
+  position: absolute;
+  left: 50%;
+  bottom: max(28px, env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  width: min(88vw, 420px);
   padding: 12px 14px;
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  border: 1px solid rgba(126, 220, 255, 0.28);
-  background: rgba(2, 11, 27, 0.7);
-}
-
-.intel-panel dt {
-  color: var(--muted);
-  text-transform: uppercase;
-}
-
-.intel-panel dd {
   color: var(--cyan);
-  font-weight: 700;
-  text-align: right;
+  text-align: center;
+  font-size: 12px;
+  text-transform: uppercase;
+  background: rgba(2, 11, 27, 0.74);
+  border: 1px solid rgba(126, 220, 255, 0.45);
+  box-shadow: 0 0 18px rgba(20, 217, 255, 0.18);
 }
 
-@keyframes hologramFloat {
-  0%, 100% { transform: translate(-50%, 0) scale(1); opacity: 0.82; }
-  50% { transform: translate(-50%, -10px) scale(1.04); opacity: 1; }
+.camera-permission {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: grid;
+  place-content: center;
+  gap: 14px;
+  padding: 24px;
+  text-align: center;
+  background:
+    linear-gradient(rgba(2, 8, 18, 0.86), rgba(2, 8, 18, 0.92)),
+    url("AR scherm 1 afbeeldingen/Achtergrond AR.png") center / cover no-repeat;
 }
 
-@media (max-width: 860px) {
-  .ar-shell {
-    padding: 12px;
-  }
+.camera-permission.is-hidden {
+  display: none;
+}
 
-  .ar-header {
-    align-items: center;
-  }
+.camera-permission h2 {
+  font-size: clamp(24px, 7vw, 42px);
+  font-weight: 400;
+  letter-spacing: 0;
+}
 
-  .ar-header h1 {
-    white-space: normal;
-  }
+.camera-permission p {
+  max-width: 420px;
+  color: #a9bdd4;
+  font-size: 18px;
+  line-height: 1.25;
+}
 
-  .hero-grid,
-  .dossier-layout {
-    grid-template-columns: 1fr;
-  }
+.camera-permission button {
+  justify-self: center;
+  margin-top: 8px;
+  padding: 13px 18px;
+  color: var(--text);
+  background: var(--panel);
+  border: 1px solid rgba(126, 220, 255, 0.7);
+  border-radius: 999px;
+  font: 700 13px 'Orbitron', sans-serif;
+  cursor: pointer;
+  box-shadow: 0 0 18px rgba(20, 217, 255, 0.22);
+}
 
-  .hero-card {
-    min-height: 190px;
+@keyframes panelBoot {
+  to {
+    opacity: 0.96;
+    transform: translateY(0) scale(1);
   }
+}
 
-  .hologram-stage,
-  .aframe-stage {
-    min-height: 420px;
-  }
-
-  .dossier-topbar {
-    flex-wrap: wrap;
-    justify-content: center;
-  }
+@keyframes panelFloat {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-8px) scale(1.015); }
 }
