@@ -1,5 +1,5 @@
 // Replace this placeholder with your final deployed GitHub Pages URL.
-const MOBILE_AR_URL = 'https://jouwgithubnaam.github.io/jouwproject/ar.html';
+const MOBILE_AR_URL = 'https://zikooo29.github.io/AR-S.H.I.E.L.D/ar.html';
 
 const HERO_DATA = {
   spiderman: {
