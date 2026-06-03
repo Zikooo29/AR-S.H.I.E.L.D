@@ -62,8 +62,7 @@ body.ar-camera-body {
   pointer-events: none;
 }
 
-.ar-panel-layer.is-hidden,
-.hero-dossier-layer.is-hidden {
+.ar-panel-layer.is-hidden {
   display: none;
 }
 
@@ -119,6 +118,13 @@ body.ar-camera-body {
   justify-content: center;
   padding: max(18px, env(safe-area-inset-top)) 18px max(34px, env(safe-area-inset-bottom));
   pointer-events: none;
+  opacity: 1;
+  visibility: visible;
+}
+
+.hero-dossier-layer.is-hidden {
+  opacity: 0;
+  visibility: hidden;
 }
 
 .spiderman-model-stage {
@@ -126,11 +132,17 @@ body.ar-camera-body {
   inset: 0;
   z-index: 1;
   pointer-events: none;
+  opacity: 1;
+  visibility: visible;
+}
+
+.spiderman-model-stage:not(.is-hidden) {
   animation: dossierOpen 420ms ease both;
 }
 
 .spiderman-model-stage.is-hidden {
-  display: none;
+  opacity: 0;
+  visibility: hidden;
 }
 
 .spiderman-model-scene,

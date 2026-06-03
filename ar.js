@@ -15,6 +15,7 @@ function initCameraAr() {
   const dossierLayer = document.getElementById('heroDossierLayer');
   const backButton = document.getElementById('backToSelect');
   const spidermanModelStage = document.getElementById('spidermanModelStage');
+  const spidermanScene = spidermanModelStage?.querySelector('a-scene');
   const spidermanModel = document.getElementById('spidermanModel');
   const modelLoadStatus = document.getElementById('modelLoadStatus');
   if (!cameraRoot || !video) return;
@@ -77,15 +78,24 @@ function initCameraAr() {
     }
     if (isSpidermanModelReady) {
       showLoadedModelStatus();
-      return;
+    } else {
+      modelLoadStatus.textContent = 'Spider-Man AR model laden...';
     }
-    modelLoadStatus.textContent = 'Spider-Man AR model laden...';
+    refreshSpidermanScene();
   }
 
   function showLoadedModelStatus() {
     if (!modelLoadStatus) return;
     modelLoadStatus.textContent = 'Spider-Man AR model actief';
     window.setTimeout(() => modelLoadStatus.classList.add('is-hidden'), 1200);
+  }
+
+  function refreshSpidermanScene() {
+    window.requestAnimationFrame(() => {
+      window.dispatchEvent(new Event('resize'));
+      spidermanScene?.resize?.();
+      spidermanScene?.renderer?.setSize(window.innerWidth, window.innerHeight);
+    });
   }
 
   startButton?.addEventListener('click', requestCamera);
