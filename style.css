@@ -6,7 +6,6 @@
 }
 
 :root {
-  --bg: #061326;
   --panel: rgba(7, 24, 48, 0.88);
   --cyan: #8edcff;
   --cyan-soft: rgba(142, 220, 255, 0.45);
@@ -80,9 +79,7 @@ body {
 .archive-panel {
   position: relative;
   width: 100%;
-  max-width: none;
   height: calc(100vh - 38px - clamp(178px, 10.5vw, 210px));
-  min-height: 0;
   margin: 0 auto;
   padding: clamp(48px, 3.6vw, 58px) 6.45vw clamp(28px, 2vw, 38px);
   background-image: linear-gradient(rgba(5, 18, 39, 0.92), rgba(5, 18, 39, 0.94)), url("afbeeldingen/Achtergrond-1.png");
@@ -183,7 +180,6 @@ body {
   top: clamp(148px, 19vh, 166px);
   left: 21.3vw;
   width: 37.8vw;
-  min-height: 0;
   padding: clamp(12px, 1vw, 16px) clamp(18px, 1.25vw, 24px);
   border-radius: 28px;
 }
@@ -232,15 +228,10 @@ body {
   filter: drop-shadow(0 0 4px rgba(142, 220, 255, 0.35));
 }
 
-.arrow-line::after {
-  content: none;
-}
-
 .description-box {
   left: 30.5vw;
   top: clamp(328px, 38vh, 360px);
   width: 19.7vw;
-  min-height: 0;
   padding: clamp(14px, 1.05vw, 20px) clamp(18px, 1.3vw, 25px);
   border-radius: 24px;
 }

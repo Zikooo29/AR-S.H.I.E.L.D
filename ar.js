@@ -1,7 +1,9 @@
-// Replace this URL if the GitHub Pages location changes.
 const MOBILE_AR_URL = 'https://zikooo29.github.io/AR-S.H.I.E.L.D/ar.html';
+const CAMERA_SIZE = {
+  width: { ideal: 1280 },
+  height: { ideal: 720 }
+};
 
-// Open the back camera and place the S.H.I.E.L.D. panel over the live environment.
 function initCameraAr() {
   const cameraRoot = document.getElementById('cameraAr');
   const video = document.getElementById('cameraFeed');
@@ -17,6 +19,9 @@ function initCameraAr() {
   const modelLoadStatus = document.getElementById('modelLoadStatus');
   if (!cameraRoot || !video) return;
 
+  let isSpidermanModelReady = false;
+  let didSpidermanModelFail = false;
+
   async function requestCamera() {
     if (!navigator.mediaDevices?.getUserMedia) {
       if (scanStatus) scanStatus.textContent = 'Camera wordt niet ondersteund in deze browser.';
@@ -24,31 +29,27 @@ function initCameraAr() {
     }
 
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: {
-          facingMode: { exact: 'environment' },
-          width: { ideal: 1280 },
-          height: { ideal: 720 }
-        },
-        audio: false
-      });
+      const stream = await getCameraStream({ exact: 'environment' });
       activateCamera(stream);
     } catch (exactError) {
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: {
-            facingMode: { ideal: 'environment' },
-            width: { ideal: 1280 },
-            height: { ideal: 720 }
-          },
-          audio: false
-        });
+        const stream = await getCameraStream({ ideal: 'environment' });
         activateCamera(stream);
       } catch (error) {
         if (scanStatus) scanStatus.textContent = 'Camera toegang geweigerd. Probeer opnieuw.';
         permissionPanel?.classList.remove('is-hidden');
       }
     }
+  }
+
+  function getCameraStream(facingMode) {
+    return navigator.mediaDevices.getUserMedia({
+      video: {
+        facingMode,
+        ...CAMERA_SIZE
+      },
+      audio: false
+    });
   }
 
   function activateCamera(stream) {
@@ -58,28 +59,44 @@ function initCameraAr() {
     if (scanStatus) scanStatus.textContent = 'S.H.I.E.L.D. AR panel initialized';
   }
 
-  function openEmptyDossier(heroKey) {
-    selectPanel?.classList.add('is-hidden');
-    dossierLayer?.classList.remove('is-hidden');
-    spidermanModelStage?.classList.toggle('is-hidden', heroKey !== 'spiderman');
-    if (heroKey === 'spiderman' && modelLoadStatus) {
-      modelLoadStatus.textContent = 'Spider-Man model laden...';
-    }
+  function showDossier(isOpen, heroKey = '') {
+    selectPanel?.classList.toggle('is-hidden', isOpen);
+    dossierLayer?.classList.toggle('is-hidden', !isOpen);
+    showSpidermanModel(isOpen && heroKey === 'spiderman');
   }
 
-  function closeEmptyDossier() {
-    dossierLayer?.classList.add('is-hidden');
-    selectPanel?.classList.remove('is-hidden');
-    spidermanModelStage?.classList.add('is-hidden');
+  function showSpidermanModel(isVisible) {
+    spidermanModelStage?.classList.toggle('is-hidden', !isVisible);
+    spidermanModelStage?.setAttribute('aria-hidden', String(!isVisible));
+    if (!isVisible || !modelLoadStatus) return;
+
+    modelLoadStatus.classList.remove('is-hidden');
+    if (didSpidermanModelFail) {
+      modelLoadStatus.textContent = 'Spider-Man model kon niet laden';
+      return;
+    }
+    if (isSpidermanModelReady) {
+      showLoadedModelStatus();
+      return;
+    }
+    modelLoadStatus.textContent = 'Spider-Man AR model laden...';
+  }
+
+  function showLoadedModelStatus() {
+    if (!modelLoadStatus) return;
+    modelLoadStatus.textContent = 'Spider-Man AR model actief';
+    window.setTimeout(() => modelLoadStatus.classList.add('is-hidden'), 1200);
   }
 
   startButton?.addEventListener('click', requestCamera);
-  backButton?.addEventListener('click', closeEmptyDossier);
+  backButton?.addEventListener('click', () => showDossier(false));
   spidermanModel?.addEventListener('model-loaded', () => {
-    if (modelLoadStatus) modelLoadStatus.textContent = 'Spider-Man model geladen';
+    isSpidermanModelReady = true;
+    showLoadedModelStatus();
   });
   spidermanModel?.addEventListener('model-error', () => {
-    if (modelLoadStatus) modelLoadStatus.textContent = 'Model kon niet laden';
+    didSpidermanModelFail = true;
+    if (modelLoadStatus) modelLoadStatus.textContent = 'Spider-Man model kon niet laden';
   });
 
   const heroButtons = document.querySelectorAll('.ar-hero-button');
@@ -88,7 +105,7 @@ function initCameraAr() {
     button.addEventListener('click', () => {
       heroButtons.forEach((item) => item.classList.remove('is-selected'));
       button.classList.add('is-selected');
-      openEmptyDossier(button.dataset.hero);
+      showDossier(true, button.dataset.hero);
     });
   });
 
@@ -113,7 +130,6 @@ function initCameraAr() {
   requestCamera();
 }
 
-// QR modal on the existing website.
 function initQrModal() {
   const openButton = document.querySelector('.ar-button');
   const modal = document.querySelector('[data-qr-modal]');
@@ -127,23 +143,23 @@ function initQrModal() {
   if (qrImage) qrImage.src = qrUrl;
   if (arLink) arLink.href = 'ar.html';
 
+  function toggleModal(isOpen) {
+    modal.classList.toggle('is-open', isOpen);
+    modal.setAttribute('aria-hidden', String(!isOpen));
+  }
+
   openButton.addEventListener('click', (event) => {
     event.preventDefault();
-    modal.classList.add('is-open');
-    modal.setAttribute('aria-hidden', 'false');
+    toggleModal(true);
   });
 
   closeButtons.forEach((button) => {
-    button.addEventListener('click', () => {
-      modal.classList.remove('is-open');
-      modal.setAttribute('aria-hidden', 'true');
-    });
+    button.addEventListener('click', () => toggleModal(false));
   });
 
   modal.addEventListener('click', (event) => {
     if (event.target === modal) {
-      modal.classList.remove('is-open');
-      modal.setAttribute('aria-hidden', 'true');
+      toggleModal(false);
     }
   });
 }
