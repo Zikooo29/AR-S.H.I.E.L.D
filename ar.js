@@ -130,13 +130,6 @@ function initCameraAr() {
     if (!THREE || !model.element?.object3D) return;
 
     const settings = {
-      deadpool: {
-        color: new THREE.Color('#c71f26'),
-        emissive: new THREE.Color('#170203'),
-        emissiveIntensity: 0.12,
-        roughness: 0.58,
-        metalness: 0.05
-      },
       ironman: {
         color: new THREE.Color('#ffffff'),
         emissive: new THREE.Color('#1e0802'),
