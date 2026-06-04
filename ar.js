@@ -36,7 +36,10 @@ function initCameraAr() {
       name: 'Deadpool',
       key: 'deadpool',
       element: document.getElementById('deadpoolModel'),
-      extras: [],
+      extras: [
+        document.getElementById('deadpoolStatsPanel'),
+        document.getElementById('deadpoolDescriptionPanel')
+      ],
       sound: document.getElementById('deadpoolSound'),
       isReady: false,
       didFail: false
@@ -45,7 +48,10 @@ function initCameraAr() {
       name: 'Iron Man',
       key: 'ironman',
       element: document.getElementById('ironmanModel'),
-      extras: [],
+      extras: [
+        document.getElementById('ironmanStatsPanel'),
+        document.getElementById('ironmanDescriptionPanel')
+      ],
       sound: document.getElementById('ironmanSound'),
       isReady: false,
       didFail: false

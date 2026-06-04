@@ -66,6 +66,8 @@
             <a-asset-item id="ironmanModelAsset" src="assets/ironman.glb"></a-asset-item>
             <a-asset-item id="spidermanStatsAsset" src="assets/stats.glb"></a-asset-item>
             <a-asset-item id="spidermanDescriptionAsset" src="assets/spidermanbeschrijving.glb"></a-asset-item>
+            <a-asset-item id="deadpoolDescriptionAsset" src="assets/deadpoolbeschrijving.glb"></a-asset-item>
+            <a-asset-item id="ironmanDescriptionAsset" src="assets/ironmanbeschrijving.glb"></a-asset-item>
             <audio id="spidermanSound" src="assets/sounds/spiderman.mp3" preload="auto"></audio>
             <audio id="deadpoolSound" src="assets/sounds/deadpool.mp3" preload="auto"></audio>
             <audio id="ironmanSound" src="assets/sounds/ironman.mp3" preload="auto"></audio>
@@ -111,24 +113,64 @@
             id="deadpoolModel"
             class="hero-model"
             gltf-model="#deadpoolModelAsset"
-            position="0 -2 -6"
+            position="0.8 -2.6 -6"
             rotation="0 180 0"
-            scale="37 37 37"
+            scale="30 30 30"
             visible="false"
-            animation__float="property: position; to: 0 -2.2 -6; dir: alternate; dur: 1500; loop: true; easing: easeInOutSine"
+            animation__float="property: position; to: 0.8 -2.4 -6; dir: alternate; dur: 1500; loop: true; easing: easeInOutSine"
             animation__scan="property: rotation; to: 0 540 0; dur: 9000; loop: true; easing: linear">
+          </a-entity>
+
+          <a-entity
+            id="deadpoolStatsPanel"
+            class="hero-info-panel"
+            gltf-model="#spidermanStatsAsset"
+            position="-1.8 -1.2 -7.4"
+            rotation="0 25 0"
+            scale="4 4 4"
+            visible="false">
+          </a-entity>
+
+          <a-entity
+            id="deadpoolDescriptionPanel"
+            class="hero-info-panel"
+            gltf-model="#deadpoolDescriptionAsset"
+            position="0 2.7 -7.6"
+            rotation="10 0 0"
+            scale="4 4 4"
+            visible="false">
           </a-entity>
 
           <a-entity
             id="ironmanModel"
             class="hero-model"
             gltf-model="#ironmanModelAsset"
-            position="0 -3.5 -7.8"
+            position="1 -3.8 -7.8"
             rotation="0 180 0"
-            scale="2.75 2.75 2.75"
+            scale="2.5 2.5 2.5"
             visible="false"
-            animation__float="property: position; to: 0 -4 -7.8; dir: alternate; dur: 1500; loop: true; easing: easeInOutSine"
+            animation__float="property: position; to: 1 -4 -7.8; dir: alternate; dur: 1500; loop: true; easing: easeInOutSine"
             animation__scan="property: rotation; to: 0 540 0; dur: 9000; loop: true; easing: linear">
+          </a-entity>
+
+          <a-entity
+            id="ironmanStatsPanel"
+            class="hero-info-panel"
+            gltf-model="#spidermanStatsAsset"
+            position="-1.8 -1.2 -7.4"
+            rotation="0 25 0"
+            scale="4 4 4"
+            visible="false">
+          </a-entity>
+
+          <a-entity
+            id="ironmanDescriptionPanel"
+            class="hero-info-panel"
+            gltf-model="#ironmanDescriptionAsset"
+            position="0 2.7 -7.6"
+            rotation="10 0 0"
+            scale="4 4 4"
+            visible="false">
           </a-entity>
 
           <a-camera position="0 0 0" look-controls="enabled: false" wasd-controls="enabled: false"></a-camera>
