@@ -66,9 +66,9 @@
             <a-asset-item id="ironmanModelAsset" src="assets/ironman.glb"></a-asset-item>
           </a-assets>
 
-          <a-entity light="type: ambient; color: #7edcff; intensity: 1.3"></a-entity>
-          <a-entity light="type: directional; color: #ffffff; intensity: 1.8" position="0 2 1"></a-entity>
-          <a-entity light="type: point; color: #26ddff; intensity: 2.2; distance: 6" position="0 1.5 1.4"></a-entity>
+          <a-entity light="type: ambient; color: #ffffff; intensity: 1.9"></a-entity>
+          <a-entity light="type: directional; color: #ffffff; intensity: 2.4" position="0 2 1"></a-entity>
+          <a-entity light="type: point; color: #7edcff; intensity: 2.6; distance: 8" position="0 1.5 1.4"></a-entity>
 
           <a-entity
             id="spidermanModel"
@@ -86,11 +86,11 @@
             id="deadpoolModel"
             class="hero-model"
             gltf-model="#deadpoolModelAsset"
-            position="0 -0.95 -8"
+            position="0 -1.15 -7"
             rotation="0 180 0"
-            scale="0.42 0.42 0.42"
+            scale="1.55 1.55 1.55"
             visible="false"
-            animation__float="property: position; to: 0 -0.82 -8; dir: alternate; dur: 1500; loop: true; easing: easeInOutSine"
+            animation__float="property: position; to: 0 -1 -7; dir: alternate; dur: 1500; loop: true; easing: easeInOutSine"
             animation__scan="property: rotation; to: 0 540 0; dur: 9000; loop: true; easing: linear">
           </a-entity>
 
@@ -98,11 +98,11 @@
             id="ironmanModel"
             class="hero-model"
             gltf-model="#ironmanModelAsset"
-            position="0 -0.8 -8.8"
+            position="0 -1.05 -7.8"
             rotation="0 180 0"
-            scale="0.86 0.86 0.86"
+            scale="1.85 1.85 1.85"
             visible="false"
-            animation__float="property: position; to: 0 -0.68 -8.8; dir: alternate; dur: 1500; loop: true; easing: easeInOutSine"
+            animation__float="property: position; to: 0 -0.9 -7.8; dir: alternate; dur: 1500; loop: true; easing: easeInOutSine"
             animation__scan="property: rotation; to: 0 540 0; dur: 9000; loop: true; easing: linear">
           </a-entity>
 
@@ -120,6 +120,6 @@
     </section>
   </main>
 
-  <script src="ar.js?v=hero-models-1"></script>
+  <script src="ar.js?v=hero-models-2"></script>
 </body>
 </html>

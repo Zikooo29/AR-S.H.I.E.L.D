@@ -22,18 +22,21 @@ function initCameraAr() {
   const heroModels = {
     spiderman: {
       name: 'Spider-Man',
+      key: 'spiderman',
       element: document.getElementById('spidermanModel'),
       isReady: false,
       didFail: false
     },
     deadpool: {
       name: 'Deadpool',
+      key: 'deadpool',
       element: document.getElementById('deadpoolModel'),
       isReady: false,
       didFail: false
     },
     ironman: {
       name: 'Iron Man',
+      key: 'ironman',
       element: document.getElementById('ironmanModel'),
       isReady: false,
       didFail: false
@@ -122,11 +125,54 @@ function initCameraAr() {
     });
   }
 
+  function improveHeroMaterials(model) {
+    const THREE = window.AFRAME?.THREE || window.THREE;
+    if (!THREE || !model.element?.object3D) return;
+
+    const settings = {
+      deadpool: {
+        color: new THREE.Color('#c71f26'),
+        emissive: new THREE.Color('#170203'),
+        emissiveIntensity: 0.12,
+        roughness: 0.58,
+        metalness: 0.05
+      },
+      ironman: {
+        color: new THREE.Color('#ffffff'),
+        emissive: new THREE.Color('#1e0802'),
+        emissiveIntensity: 0.18,
+        roughness: 0.34,
+        metalness: 0.25
+      }
+    }[model.key];
+
+    if (!settings) return;
+
+    model.element.object3D.traverse((child) => {
+      if (!child.isMesh || !child.material) return;
+      const materials = Array.isArray(child.material) ? child.material : [child.material];
+
+      materials.forEach((material, index) => {
+        const adjustedMaterial = material.clone();
+        if (adjustedMaterial.color) adjustedMaterial.color.multiply(settings.color);
+        if (adjustedMaterial.emissive) adjustedMaterial.emissive.copy(settings.emissive);
+        if ('emissiveIntensity' in adjustedMaterial) adjustedMaterial.emissiveIntensity = settings.emissiveIntensity;
+        if ('roughness' in adjustedMaterial) adjustedMaterial.roughness = settings.roughness;
+        if ('metalness' in adjustedMaterial) adjustedMaterial.metalness = settings.metalness;
+        adjustedMaterial.needsUpdate = true;
+        materials[index] = adjustedMaterial;
+      });
+
+      child.material = Array.isArray(child.material) ? materials : materials[0];
+    });
+  }
+
   startButton?.addEventListener('click', requestCamera);
   backButton?.addEventListener('click', () => showDossier(false));
   Object.values(heroModels).forEach((model) => {
     model.element?.addEventListener('model-loaded', () => {
       model.isReady = true;
+      improveHeroMaterials(model);
       showLoadedModelStatus(model.name);
     });
     model.element?.addEventListener('model-error', () => {
