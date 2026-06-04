@@ -64,6 +64,11 @@
             <a-asset-item id="spidermanModelAsset" src="assets/spiderman.glb"></a-asset-item>
             <a-asset-item id="deadpoolModelAsset" src="assets/deadpool.glb"></a-asset-item>
             <a-asset-item id="ironmanModelAsset" src="assets/ironman.glb"></a-asset-item>
+            <a-asset-item id="spidermanStatsAsset" src="assets/stats.glb"></a-asset-item>
+            <a-asset-item id="spidermanDescriptionAsset" src="assets/spidermanbeschrijving.glb"></a-asset-item>
+            <audio id="spidermanSound" src="assets/sounds/spiderman.mp3" preload="auto"></audio>
+            <audio id="deadpoolSound" src="assets/sounds/deadpool.mp3" preload="auto"></audio>
+            <audio id="ironmanSound" src="assets/sounds/ironman.mp3" preload="auto"></audio>
           </a-assets>
 
           <a-entity light="type: ambient; color: #ffffff; intensity: 1.9"></a-entity>
@@ -80,6 +85,26 @@
             visible="false"
             animation__float="property: position; to: 0 -1.5 -10; dir: alternate; dur: 1500; loop: true; easing: easeInOutSine"
             animation__scan="property: rotation; to: 0 540 0; dur: 9000; loop: true; easing: linear">
+          </a-entity>
+
+          <a-entity
+            id="spidermanStatsPanel"
+            class="spiderman-info-panel"
+            gltf-model="#spidermanStatsAsset"
+            position="-3.5 -1 -7.4"
+            rotation="0 25 0"
+            scale="4 4 4"
+            visible="false">
+          </a-entity>
+
+          <a-entity
+            id="spidermanDescriptionPanel"
+            class="spiderman-info-panel"
+            gltf-model="#spidermanDescriptionAsset"
+            position="0 2.7 -7.6"
+            rotation="10 0 0"
+            scale="4 4 4"
+            visible="false">
           </a-entity>
 
           <a-entity
@@ -120,6 +145,6 @@
     </section>
   </main>
 
-  <script src="ar.js?v=deadpool-position-tune-1"></script>
+  <script src="ar.js?v=spiderman-panels-1"></script>
 </body>
 </html>

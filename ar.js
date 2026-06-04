@@ -24,6 +24,11 @@ function initCameraAr() {
       name: 'Spider-Man',
       key: 'spiderman',
       element: document.getElementById('spidermanModel'),
+      extras: [
+        document.getElementById('spidermanStatsPanel'),
+        document.getElementById('spidermanDescriptionPanel')
+      ],
+      sound: document.getElementById('spidermanSound'),
       isReady: false,
       didFail: false
     },
@@ -31,6 +36,8 @@ function initCameraAr() {
       name: 'Deadpool',
       key: 'deadpool',
       element: document.getElementById('deadpoolModel'),
+      extras: [],
+      sound: document.getElementById('deadpoolSound'),
       isReady: false,
       didFail: false
     },
@@ -38,6 +45,8 @@ function initCameraAr() {
       name: 'Iron Man',
       key: 'ironman',
       element: document.getElementById('ironmanModel'),
+      extras: [],
+      sound: document.getElementById('ironmanSound'),
       isReady: false,
       didFail: false
     }
@@ -92,6 +101,9 @@ function initCameraAr() {
 
     Object.entries(heroModels).forEach(([key, model]) => {
       model.element?.setAttribute('visible', key === heroKey);
+      model.extras?.forEach((extra) => {
+        extra?.setAttribute('visible', key === heroKey);
+      });
     });
 
     heroModelStage?.classList.toggle('is-hidden', !isVisible);
@@ -108,6 +120,7 @@ function initCameraAr() {
     } else {
       modelLoadStatus.textContent = `${selectedModel.name} AR model laden...`;
     }
+    playHeroSound(selectedModel);
     refreshHeroScene();
   }
 
@@ -122,6 +135,22 @@ function initCameraAr() {
       window.dispatchEvent(new Event('resize'));
       heroScene?.resize?.();
       heroScene?.renderer?.setSize(window.innerWidth, window.innerHeight);
+    });
+  }
+
+  function playHeroSound(model) {
+    if (!model.sound) return;
+
+    Object.values(heroModels).forEach((heroModel) => {
+      if (heroModel.sound && heroModel.sound !== model.sound) {
+        heroModel.sound.pause();
+        heroModel.sound.currentTime = 0;
+      }
+    });
+
+    model.sound.currentTime = 0;
+    model.sound.play().catch(() => {
+      if (scanStatus) scanStatus.textContent = 'Tik nogmaals om geluid te starten.';
     });
   }
 
