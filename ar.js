@@ -18,6 +18,7 @@ function initCameraAr() {
   const heroScene = heroModelStage?.querySelector('a-scene');
   const modelLoadStatus = document.getElementById('modelLoadStatus');
   if (!cameraRoot || !video) return;
+  let activeHeroKey = '';
 
   const heroModels = {
     spiderman: {
@@ -92,23 +93,25 @@ function initCameraAr() {
     video.srcObject = stream;
     cameraRoot.classList.add('is-camera-ready');
     permissionPanel?.classList.add('is-hidden');
-    if (scanStatus) scanStatus.textContent = 'S.H.I.E.L.D. AR panel initialized';
+    if (scanStatus) scanStatus.textContent = 'S.H.I.E.L.D. AR-paneel gestart';
   }
 
   function showDossier(isOpen, heroKey = '') {
+    activeHeroKey = isOpen ? heroKey : '';
     selectPanel?.classList.toggle('is-hidden', isOpen);
     dossierLayer?.classList.toggle('is-hidden', !isOpen);
     showHeroModel(isOpen ? heroKey : '');
+    if (!isOpen) pauseHeroSounds();
   }
 
   function showHeroModel(heroKey) {
     const selectedModel = heroModels[heroKey];
     const isVisible = Boolean(selectedModel);
 
-    Object.entries(heroModels).forEach(([key, model]) => {
-      model.element?.setAttribute('visible', key === heroKey);
+    Object.values(heroModels).forEach((model) => {
+      model.element?.setAttribute('visible', model.key === heroKey);
       model.extras?.forEach((extra) => {
-        extra?.setAttribute('visible', key === heroKey);
+        extra?.setAttribute('visible', model.key === heroKey);
       });
     });
 
@@ -124,7 +127,7 @@ function initCameraAr() {
     if (selectedModel.isReady) {
       showLoadedModelStatus(selectedModel.name);
     } else {
-      modelLoadStatus.textContent = `${selectedModel.name} AR model laden...`;
+      modelLoadStatus.textContent = `${selectedModel.name} AR-model laden...`;
     }
     playHeroSound(selectedModel);
     refreshHeroScene();
@@ -132,7 +135,7 @@ function initCameraAr() {
 
   function showLoadedModelStatus(heroName) {
     if (!modelLoadStatus) return;
-    modelLoadStatus.textContent = `${heroName} AR model actief`;
+    modelLoadStatus.textContent = `${heroName} AR-model actief`;
     window.setTimeout(() => modelLoadStatus.classList.add('is-hidden'), 1200);
   }
 
@@ -147,16 +150,19 @@ function initCameraAr() {
   function playHeroSound(model) {
     if (!model.sound) return;
 
-    Object.values(heroModels).forEach((heroModel) => {
-      if (heroModel.sound && heroModel.sound !== model.sound) {
-        heroModel.sound.pause();
-        heroModel.sound.currentTime = 0;
-      }
-    });
-
+    pauseHeroSounds(model.sound);
     model.sound.currentTime = 0;
     model.sound.play().catch(() => {
       if (scanStatus) scanStatus.textContent = 'Tik nogmaals om geluid te starten.';
+    });
+  }
+
+  function pauseHeroSounds(exceptSound = null) {
+    Object.values(heroModels).forEach((heroModel) => {
+      if (heroModel.sound && heroModel.sound !== exceptSound) {
+        heroModel.sound.pause();
+        heroModel.sound.currentTime = 0;
+      }
     });
   }
 
@@ -201,7 +207,7 @@ function initCameraAr() {
     model.element?.addEventListener('model-loaded', () => {
       model.isReady = true;
       improveHeroMaterials(model);
-      showLoadedModelStatus(model.name);
+      if (activeHeroKey === model.key) showLoadedModelStatus(model.name);
     });
     model.element?.addEventListener('model-error', () => {
       model.didFail = true;
@@ -232,8 +238,8 @@ function initCameraAr() {
 
     if (scanStatus) {
       scanStatus.textContent = visibleCount
-        ? `${visibleCount} dossier result${visibleCount === 1 ? '' : 's'} found`
-        : 'No matching hero dossier found';
+        ? `${visibleCount} dossier${visibleCount === 1 ? '' : 's'} gevonden`
+        : 'Geen passend heldendossier gevonden';
     }
   });
 

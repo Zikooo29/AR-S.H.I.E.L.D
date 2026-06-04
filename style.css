@@ -6,11 +6,9 @@
 }
 
 :root {
-  --panel: rgba(7, 24, 48, 0.88);
   --cyan: #8edcff;
   --cyan-soft: rgba(142, 220, 255, 0.45);
   --text: #c7d7e8;
-  --muted: #99abc0;
 }
 
 body {
